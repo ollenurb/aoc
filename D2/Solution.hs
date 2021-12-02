@@ -1,5 +1,3 @@
-import Data.Maybe
-
 data Direction = Up
                | Down
                | Forward
