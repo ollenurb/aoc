@@ -1,0 +1,31 @@
+module Main where
+
+import Day1 (solve)
+import Day2 (solve)
+import Day3 (solve)
+import Day4 (solve)
+import Day5 (solve)
+import Day6 (solve)
+import Day7 (solve)
+import Day8 (solve)
+import Day9 (solve)
+import Day10 (solve)
+import Day11 (solve)
+import Day12 (solve)
+import Day13 (solve)
+import Day14 (solve)
+import Day15 (solve)
+import Day16 (solve)
+import Day17 (solve)
+import Day18 (solve)
+import Day19 (solve)
+import Day20 (solve)
+import Day21 (solve)
+import Day22 (solve)
+import Day23 (solve)
+import Day24 (solve)
+import Day25 (solve)
+
+main :: IO ()
+main = interact Day1.solve
+

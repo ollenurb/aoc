@@ -1,3 +1,5 @@
+module Day2 where
+
 data Direction = Up
                | Down
                | Forward
@@ -5,31 +7,34 @@ data Direction = Up
 
 type Command = (Direction, Int)
 
-main :: IO ()
-main = interact solve
-
+-- Do not change. The main program will access the solutions from this function
 solve :: String -> String
-solve ss = "First solution is " ++ show (s1 cmds) ++ ", second is " ++ show (s2 cmds)
-    where
-        cmds = map parseLine . lines $ ss  -- Converted String in a list of Ints
+solve fcontent = "Solution 1:\t" ++ sol1 ++ "\nSolution 2:\t" ++ sol2 ++ "\n"
+    where problemInput = parseFileContent fcontent
+          sol1 = (show . s1) problemInput
+          sol2 = (show . s1) problemInput
 
----------------------------------------------------------------
------------------- Annoying parsing stuff ---------------------
----------------------------------------------------------------
+------------------------------------------------------------------------------
+-- Change according to the problem
+type ProblemInput = [Command]
+
+-- Parse the input file
+parseFileContent :: String -> ProblemInput
+parseFileContent = map parseLine . lines
+
 parseDirection :: String -> Direction
 parseDirection dirStr
     | dirStr == "up"      = Up
     | dirStr == "down"    = Down
     | dirStr == "forward" = Forward
+    | otherwise           = undefined
 
 parseLine :: String -> Command
 parseLine line = (parseDirection dirStr, read qnt)
     where [dirStr, qnt] = words line
 
----------------------------------------------------------------
------------ Actual Algorithms to solve the problems -----------
----------------------------------------------------------------
-s1 :: [Command] -> Int
+-- Solve the first part
+s1 :: ProblemInput -> Int
 s1 = uncurry (*) . foldr executeCommand (0, 0)
     where
         executeCommand :: Command -> (Int, Int) -> (Int, Int)
@@ -39,7 +44,8 @@ s1 = uncurry (*) . foldr executeCommand (0, 0)
               Down    -> (hp, vp + qnt)
               Forward -> (hp + qnt, vp)
 
-s2 :: [Command] -> Int
+-- Solve the second part
+s2 :: ProblemInput -> Int
 s2 cmds = hp * vp
     where
         (hp, vp, _) = foldl (flip executeCommand') (0, 0, 0) cmds
