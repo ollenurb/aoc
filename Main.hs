@@ -27,5 +27,5 @@ import Day24 (solve)
 import Day25 (solve)
 
 main :: IO ()
-main = interact Day5.solve
+main = interact Day6.solve
 

@@ -16,19 +16,6 @@ solve fcontent = "Solution 1:\t" ++ sol1 ++ "\nSolution 2:\t" ++ sol2 ++ "\n"
 data Line = Line { getStart :: (Int, Int), getEnd :: (Int, Int) }
     deriving (Show, Eq)
 
-sampleLines :: [Line]
-sampleLines = [
-    Line (0,9) (5,9),
-    Line (8,0) (0,8),
-    Line (9,4) (3,4),
-    Line (2,2) (2,1),
-    Line (7,0) (7,4),
-    Line (6,4) (2,0),
-    Line (0,9) (2,9),
-    Line (3,4) (1,4),
-    Line (0,0) (8,8),
-    Line (5,5) (8,2)]
-
 -- Change according to the problem
 type ProblemInput = [Line]
 
@@ -38,12 +25,6 @@ parseFileContent = map (parseLine . words) . lines
     where parseLine [s, "->", e] = Line (read $ parenthesize s) (read $ parenthesize e)
           parseLine _            = error "Malformed line found"
           parenthesize x = "(" ++ x ++ ")"
-
--- TODO: To remove
-testSolve :: IO Int
-testSolve = do
-    fileContent <- readFile "inputs/Day5.txt"
-    (return . s1 . parseFileContent) fileContent
 
 (...) :: (Ord a, Enum a) => a ->  a -> [a]
 a ... b
@@ -81,4 +62,3 @@ s2 problemInput = length $ filter ((>= 2) . snd) nOverlaps
           lines45 = filter is45Deg problemInput
           linesPoints = (hvLines ++ lines45) >>= genPoints
           nOverlaps = (HM.toList . groupAll) linesPoints
-
