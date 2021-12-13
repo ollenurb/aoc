@@ -1,26 +1,39 @@
 module Day7 where
 
 -- Needed imports
+import Data.List.Split (splitWhen)
 
 -- Do not change. The main program will access the solutions from this function
 solve :: String -> String
-solve fcontent = "Solution 1:\t" ++ sol1 ++ "\nSolution2:\t" ++ sol2 ++ "\n"
+solve fcontent = "Solution 1:\t" ++ sol1 ++ "\nSolution 2:\t" ++ sol2 ++ "\n"
     where problemInput = parseFileContent fcontent
           sol1 = (show . s1) problemInput
-          sol2 = (show . s1) problemInput
+          sol2 = (show . s2) problemInput
 
 ------------------------------------------------------------------------------
 -- Change according to the problem
-type ProblemInput = String
+type ProblemInput = [Int]
 
 -- Parse the input file
 parseFileContent :: String -> ProblemInput
-parseFileContent = undefined
+parseFileContent = map read . splitWhen (==',')
+
+computeCost :: Int -> ProblemInput -> Int
+computeCost v = sum . map (abs . (v -))
 
 -- Solve the first part
 s1 :: ProblemInput -> Int
-s1 problemInput = -1
+s1 problemInput = minimum costs
+    where meanVal = round (fromIntegral (sum problemInput) / fromIntegral (length problemInput))
+          costs = [computeCost v problemInput | v <- [0..meanVal]]
+
+computeCost' :: Int -> ProblemInput -> Int
+computeCost' v = sum . map (newStep . dist v)
+    where dist x y = abs (x - y)
+          newStep d = sum [1..d]
 
 -- Solve the second part
 s2 :: ProblemInput -> Int
-s2 problemInput = -1
+s2 problemInput = minimum costs
+    where meanVal = round (fromIntegral (sum problemInput) / fromIntegral (length problemInput))
+          costs = [computeCost' v problemInput | v <- [0..meanVal]]
