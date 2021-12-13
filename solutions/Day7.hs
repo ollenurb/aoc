@@ -23,17 +23,15 @@ computeCost v = sum . map (abs . (v -))
 
 -- Solve the first part
 s1 :: ProblemInput -> Int
-s1 problemInput = minimum costs
-    where meanVal = round (fromIntegral (sum problemInput) / fromIntegral (length problemInput))
-          costs = [computeCost v problemInput | v <- [0..meanVal]]
+s1 pi = minimum costs
+    where costs = map (`computeCost` pi) [minimum pi..maximum pi]
 
 computeCost' :: Int -> ProblemInput -> Int
 computeCost' v = sum . map (newStep . dist v)
     where dist x y = abs (x - y)
-          newStep d = sum [1..d]
+          newStep d = d*(d-1) `div` 2 -- \Sum_{i=1}^n = \frac{n(n-1)}{2}
 
 -- Solve the second part
 s2 :: ProblemInput -> Int
-s2 problemInput = minimum costs
-    where meanVal = round (fromIntegral (sum problemInput) / fromIntegral (length problemInput))
-          costs = [computeCost' v problemInput | v <- [0..meanVal]]
+s2 pi = minimum costs
+    where costs = map (`computeCost'` pi) [minimum pi..maximum pi]
