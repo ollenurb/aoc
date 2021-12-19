@@ -34,8 +34,8 @@ library solutions
   hs-source-dirs:   solutions
   build-depends:    base ^>=4.14.3.0,
                     containers,
-                    split,
-                    hashmap
+                    unordered-containers,
+                    split
   default-language: Haskell2010
 
 executable aoc-solver

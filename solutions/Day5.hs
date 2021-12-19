@@ -3,7 +3,7 @@ module Day5 where
 -- Needed imports
 import Data.Tuple (swap)
 import Data.List (group)
-import qualified Data.HashMap as HM
+import qualified Data.HashMap.Lazy as HM
 
 -- Do not change. The main program will access the solutions from this function
 solve :: String -> String
@@ -45,7 +45,7 @@ is45Deg (Line (x, y) (x', y')) = abs (x - x') == abs (y - y')
 
 -- Given a list of points, returns an hashmap that indicates how many times
 -- a point occur on the original list
-groupAll :: [(Int, Int)] -> HM.Map (Int, Int) Int
+groupAll :: [(Int, Int)] -> HM.HashMap (Int, Int) Int
 groupAll = foldr (\x->HM.insertWith (+) x 1) HM.empty
 
 -- Solve the first part
