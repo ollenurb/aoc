@@ -6,5 +6,5 @@ stick mainly to Haskell.
 
 ## Haskell
 ```
-cat INPUT_FILE.txt | runhaskell Solution.hs
+cat INPUT_FILE.txt | cabal run Solution.hs
 ```
