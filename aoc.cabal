@@ -37,7 +37,8 @@ library solutions
                     unordered-containers,
                     mtl,
                     split,
-                    matrix
+                    matrix,
+                    hashable
   default-language: Haskell2010
 
 executable aoc-solver
