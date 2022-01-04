@@ -38,7 +38,9 @@ library solutions
                     mtl,
                     split,
                     matrix,
-                    hashable
+                    hashable,
+                    heaps,
+                    PSQueue
   default-language: Haskell2010
 
 executable aoc-solver
