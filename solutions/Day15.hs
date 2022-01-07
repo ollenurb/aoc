@@ -1,15 +1,13 @@
 module Day15 where
 
 -- Needed imports
-import Data.Matrix (Matrix, nrows, ncols, matrix, (!), setElem)
+import           Data.Matrix            (Matrix, nrows, ncols, matrix, (!), setElem)
 import qualified Data.Matrix as Matrix
-import Control.Monad.State (State, get, put, when, evalState)
-
-import Data.Char (digitToInt)
-import Data.PSQueue (PSQ, Binding ((:->)), key)
+import           Control.Monad.State    (State, get, put, when, evalState)
+import           Data.Char              (digitToInt)
+import           Data.PSQueue           (PSQ, Binding ((:->)))
 import qualified Data.PSQueue as Queue
 
-import Debug.Trace (trace)
 
 -- Do not change. The main program will access the solutions from this function
 solve :: String -> String
@@ -21,16 +19,33 @@ solve fcontent = "Solution 1:\t" ++ sol1 ++ "\nSolution 2:\t" ++ sol2 ++ "\n"
 ------------------------------------------------------------------------------
 -- Change according to the problem
 type ProblemInput = Graph
-type Graph = Matrix Double
+type Graph = Matrix Int
 type Vertex = (Int, Int)
+type Infinitable = Infinite Int
 
-type DijkstraState = (Graph, PSQ Vertex Double, Matrix Double)
--- Dijkstra function state
---    - Graph
---    - Priority queue
---    - Dist
---    - Prev
+type DijkstraState = (Graph, PSQ Vertex Infinitable, Matrix Infinitable)
 type SolverState a = State DijkstraState a
+
+data Infinite a = Infinity
+                | Number a
+    deriving (Eq, Show)
+
+instance Functor Infinite where
+    fmap f (Number a) = Number $ f a
+    fmap f Infinity   = Infinity
+
+instance (Num a) => Num (Infinite a) where
+    (+) (Number a) b = fmap (+a) b
+    (+) a b          = (+) b a
+
+instance (Ord a) => Ord (Infinite a) where
+    (<=) Infinity _            = False
+    (<=) _ Infinity            = True
+    (<=) (Number a) (Number b) = a <= b
+
+unwrap :: Infinite a -> a
+unwrap (Number a) = a
+unwrap Infinity = error "Cannot unwrap infinity values"
 
 sampleInput :: Graph
 sampleInput = Matrix.fromLists
@@ -50,19 +65,20 @@ neighbors g (i, j) = filter checkBounds [(i-1, j), (i+1, j), (i, j+1), (i, j-1)]
     where (r, c) = (nrows g, ncols g)
           checkBounds (i', j') = i' <= r && i' >= 1 && j' <= c && j' >= 1
 
-bestPath :: Graph -> Vertex -> Vertex -> Double
-bestPath graph source target = runDijkstra ! target
-    where (r, c) = (nrows graph, ncols graph)
-          dist = setElem 0 source $ matrix r c (const infinity)
-          heap = Queue.fromList [(i, j) :-> (dist ! (i, j)) | i <- [1..r], j <- [1..c]]
-          runDijkstra = evalState (dijkstra target) (graph, heap, dist)
+bestCost :: Graph -> Vertex -> Vertex -> Int
+bestCost graph source target = unwrap $ runDijkstra ! target
+    where
+        (r, c) = (nrows graph, ncols graph)
+        dist = setElem (Number 0) source $ matrix r c (const Infinity)
+        heap = Queue.fromList [(i, j) :-> (dist ! (i, j)) | i <- [1..r], j <- [1..c]]
+        runDijkstra = evalState (dijkstra target) (graph, heap, dist)
 
-dijkstra :: Vertex -> SolverState (Matrix Double)
+dijkstra :: Vertex -> SolverState (Matrix Infinitable)
 dijkstra target = do
     (graph, heap, dist) <- get
     case Queue.minView heap of
       Nothing -> return dist
-      Just (u :-> k, heap') -> if u == target then return dist else do
+      Just (u :-> _, heap') -> if u == target then return dist else do
         let neighs = neighbors graph u
         put (graph, heap', dist)
         mapM_ (loop u) neighs
@@ -71,42 +87,32 @@ dijkstra target = do
 loop :: Vertex -> Vertex -> SolverState ()
 loop u v = do
     (graph, heap, dist) <- get
-    let alt = (dist ! u) + (graph ! v)
+    let alt = (dist ! u) + Number (graph ! v)
     when (alt < dist ! v) $ do
         let dist' = setElem alt v dist
-        let heap' = Queue.adjust (\p -> p - alt) v heap
+        let heap' = Queue.adjust (decreasePrio alt) v heap
         put (graph, heap', dist')
 
-infinity :: Double
-infinity = read "Infinity"
+decreasePrio :: Infinitable -> Infinitable -> Infinitable
+decreasePrio v Infinity = v
+decreasePrio a b        = b - a
 
 -- Parse the input file
 parseFileContent :: String -> ProblemInput
-parseFileContent = Matrix.fromLists . map (map toDouble) . lines
-    where toDouble x = fromIntegral (digitToInt x) :: Double
+parseFileContent = Matrix.fromLists . map (map digitToInt) . lines
 
 -- Solve the first part
 s1 :: ProblemInput -> Int
-s1 pi = floor $ bestPath pi (1,1) (r, c)
+s1 pi = bestCost pi (1,1) (r, c)
     where (r, c) = (nrows pi, ncols pi)
 
-testMatrix :: Matrix Int
-testMatrix = Matrix.fromLists [[1,2], [2,3]]
-
-magnify :: Matrix Double -> Matrix Double
-magnify m = Matrix.flatten mapped
+inflate :: Matrix Int -> Matrix Int
+inflate m = Matrix.flatten mapped
     where stencil = Matrix.fromLists [[fromIntegral (i + j) | j <- [0..4]] | i <- [0..4]]
-          mapped = (\x-> f (fromIntegral x) <$> m) <$> stencil
-
-f :: Double -> Double -> Double
-f x y | x + y >= 9 = 1
-      | otherwise = x + y
-
-test :: (Num a) => Matrix a -> [[a]]
-test m = [[fromIntegral (i + j) | j <- [0..4]] | i <- [0..4]]
-    where (r, c) = (nrows m, ncols m)
+          mapped = (\x-> f x <$> m) <$> stencil
+          f x y = uncurry (+) $ quotRem (x + y) 10
 
 -- Solve the second part
 s2 :: ProblemInput -> Int
-s2 pi = floor $ bestPath (magnify pi) (1,1) (r, c)
+s2 pi = bestCost (inflate pi) (1,1) (r, c)
     where (r, c) = (nrows pi, ncols pi)
