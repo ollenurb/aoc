@@ -32,6 +32,7 @@ library solutions
                     Day24,
                     Day25
   hs-source-dirs:   solutions
+  extensions: TypeApplications
   build-depends:    base ^>=4.14.3.0,
                     containers,
                     unordered-containers,
@@ -49,4 +50,7 @@ executable aoc-solver
                     base ^>=4.14.3.0
   hs-source-dirs:   .
   default-language: Haskell2010
-  ghc-options:      -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:     -O2
+                   -threaded
+                   -fprof-auto
+                   -with-rtsopts=-N
