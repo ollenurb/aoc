@@ -114,5 +114,6 @@ inflate m = Matrix.flatten mapped
 
 -- Solve the second part
 s2 :: ProblemInput -> Int
-s2 pi = bestCost (inflate pi) (1,1) (r, c)
-    where (r, c) = (nrows pi, ncols pi)
+s2 pi = bestCost inflated (1,1) (r, c)
+    where (r, c) = (nrows inflated, ncols inflated)
+          inflated = inflate pi
