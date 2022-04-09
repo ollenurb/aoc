@@ -31,12 +31,12 @@ parseRule s = (k, head v)
 parseTemplate :: String -> Histogram String
 parseTemplate str = foldr insertHistogram empty $ zipWith (\a b -> [a,b]) str (tail str)
 
-insertHistogram :: (Hashable k) => k -> Histogram k -> Histogram k
+insertHistogram :: (Hashable k, Eq k) => k -> Histogram k -> Histogram k
 insertHistogram = flip (insertWith (+)) 1
 
 -- mapping: mapping function
 -- mf: merge function
-concatMapWith :: (Hashable k) => (v -> v -> v) -> (k -> [k]) -> HashMap k v -> HashMap k v
+concatMapWith :: (Hashable k, Eq k) => (v -> v -> v) -> (k -> [k]) -> HashMap k v -> HashMap k v
 concatMapWith mf mapping = foldrWithKey folder empty
     where folder k v m = foldr (flip (insertWith mf) v) m (mapping k)
 
