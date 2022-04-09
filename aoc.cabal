@@ -32,7 +32,7 @@ library solutions
                     Day24,
                     Day25
   hs-source-dirs:   solutions
-  extensions: TypeApplications
+  extensions:       TypeApplications
   build-depends:    base ^>=4.14.3.0,
                     containers,
                     unordered-containers,
