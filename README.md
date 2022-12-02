@@ -1,10 +1,9 @@
-# Advent of Code 2021 solutions
+# Advent of Code Solutions
+Storage of my AoCs solutions 
 
-Here are my solutions to the 2021 edition of the AOC, written in Haskell.
+### Editions
+Here is a list of the various editions that I tried, along with the programming
+language that I used to solve it
 
-## Compile and Run
-Set the corresponding day that you want to solve in `Main.hs`, then simply run
-
-```
-cat INPUT_FILE.txt | cabal run
-```
+* [2021](2021) - Haskell
+* [2022](2022) - Rust
