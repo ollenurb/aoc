@@ -1,45 +1,40 @@
+type InputItem = (u32, u32);
 
-type InputItem = (GameResult, GameResult);
-
-pub enum GameResult {
-    Rock(),
-    Paper(),
-    Scissor(),
-}
-
-// Convert a character to a particular GameResult
-fn char_to_result(chr: char) -> GameResult {
-    match chr {
-        'A' | 'X' => GameResult::Rock(),
-        'B' | 'Y' => GameResult::Paper(),
-        'C' | 'Z' => GameResult::Scissor(),
-        _ => panic!("Unsupported format")
-    }
-}
-
-// Simpe parsing line
+// Simple line parsing routine
 pub fn parse_line(str: String) -> InputItem {
     let fst = str.chars().nth(0).unwrap();
-    let snd = str.chars().nth(1).unwrap();
-
-    (char_to_result(fst), char_to_result(snd))
+    let snd = str.chars().nth(2).unwrap();
+    (fst as u32, snd as u32)
 }
 
+// Solve both problems of this day
 pub fn solve(content: impl Iterator<Item = String>) {
-    // Parse the content
+    // Parse the file content
     let content: Vec<InputItem> = content.map(|s| parse_line(s)).collect();
+    // Pass the parsed content to the solvers
     solve_first(&content);
     solve_second(&content);
 }
 
+fn compl(op: u32) -> u32 {
+    (op % 3) + 1
+}
+
 pub fn solve_first(content: &Vec<InputItem>) {
-    content.iter()
-           .map(|s| match s {
+    let res = content.iter()
+        .fold(0, |acc, i| {
+            let (opp, me) = (i.0 - 64, i.1 - 87);
 
-    
-           })
+            me + if opp == me {
+                3
+            } else if compl(me) == opp  {
+                0
+            } else {
+                6
+            } + acc
+        });
 
-    todo!("I'm working on it!")
+    println!("{}", res);
 }
 
 pub fn solve_second(content: &Vec<InputItem>) {
