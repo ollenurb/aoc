@@ -34,9 +34,21 @@ pub fn solve_first(content: &Vec<InputItem>) {
             } + acc
         });
 
-    println!("{}", res);
+    println!("First Part {}", res);
 }
 
 pub fn solve_second(content: &Vec<InputItem>) {
-    todo!("I'm working on it!")
+    let res = content.iter()
+        .fold(0, |acc, i| {
+            let (opp, outcome) = (i.0 - 64, (i.1 - 88) * 3);
+
+            outcome + acc + match outcome {
+                0 => compl(compl(opp)),
+                3 => opp,
+                6 => compl(opp),
+                _ => panic!("Unable to handle this")
+            }
+        });
+
+    println!("Second Part {}", res);
 }
