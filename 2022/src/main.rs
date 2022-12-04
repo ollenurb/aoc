@@ -1,6 +1,6 @@
-// mod day1;
-// mod day2;
-// mod day3;
+mod day1;
+mod day2;
+mod day3;
 mod day4;
 pub mod util;
 
@@ -17,10 +17,27 @@ fn load_input(day: usize) -> impl Iterator<Item = String> {
 
     buffered_file
         .lines()
-        .map(|line| line.expect("Failed to read line from data file"))
+        .map(|line| line.expect("Failed to read line from input file"))
 }
 
 fn main() {
-    let in4 = load_input(4);
-    day4::solve(in4);
+    let day: usize = std::env::args()
+        .nth(1)
+        .expect("Usage: cargo run -- [day]")
+        .parse()
+        .expect("Invalid day number");
+
+    let input = load_input(day);
+    let solution = match day {
+        1 => day1::solve(input),
+        2 => day2::solve(input),
+        3 => day3::solve(input),
+        4 => day4::solve(input),
+        _ => unreachable!(),
+    };
+
+    println!("================ Day {:0>2} ================", day);
+    println!("First Part: {}", solution.0);
+    println!("Second Part: {}", solution.1);
+    println!("========================================");
 }

@@ -1,25 +1,24 @@
-pub fn solve(content: impl Iterator<Item = String>) {
+type ItemType = Option<usize>;
+
+pub fn solve(content: impl Iterator<Item = String>) -> (usize, usize) {
     // Parse the content
-    let content: Vec<Option<u32>> = content.map(|s| s.parse().ok()).collect();
-    solve_first(&content);
-    solve_second(&content);
+    let content: Vec<ItemType> = content.map(|s| s.parse().ok()).collect();
+    (solve_first(&content), solve_second(&content))
 }
 
-pub fn solve_first(content: &Vec<Option<u32>>) {
-    let (_, result) = content.iter().fold((0, 0), |state: (u32, u32), value| {
+fn solve_first(content: &Vec<ItemType>) -> usize {
+    content.iter().fold((0, 0), |state: (usize, usize), value| {
         let (counter, max) = state;
 
         match value {
             Some(val) => (val + counter, max),
             None => (0, if counter > max { counter } else { max }),
         }
-    });
-
-    println!("First Part: {}", result);
+    }).1
 }
 
-pub fn solve_second(content: &Vec<Option<u32>>) {
-    let (mut buckets, _) = content.iter().fold((Vec::new(), 0), |state: (Vec<u32>, u32), value| {
+fn solve_second(content: &Vec<ItemType>) -> usize {
+    let (mut buckets, _) = content.iter().fold((Vec::new(), 0), |state: (Vec<usize>, usize), value| {
             let (mut buckets, acc) = state;
 
             match value {
@@ -33,7 +32,5 @@ pub fn solve_second(content: &Vec<Option<u32>>) {
 
     // Sort buckets
     buckets.sort_by(|a, b| b.cmp(a));
-    let result: u32 = buckets[..3].iter().sum();
-
-    println!("Second Part: {}", result);
+    buckets[..3].iter().sum()
 }
