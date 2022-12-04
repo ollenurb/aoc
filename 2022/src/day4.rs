@@ -6,14 +6,13 @@ type Range = (usize, usize);
 
 // Simple line parsing routine
 pub fn parse_line(str: String) -> InputItem {
-    str
-        .split_once(',')
-        .unwrap()
-        .bimap(|r| {
-            r.split_once('-')
-             .unwrap()
-             .bimap(|v| v.parse().unwrap())
-        })
+    str.split_once(',')
+       .unwrap()
+       .bimap(|r| {
+           r.split_once('-')
+            .unwrap()
+            .bimap(|v| v.parse().unwrap())
+       })
 }
 
 // Solve both problems of this day
@@ -24,7 +23,6 @@ pub fn solve(content: impl Iterator<Item = String>) {
 }
 
 pub fn solve_first(content: &Vec<InputItem>) {
-    content.iter().for_each(|i| println!("{:?}", i));
     let res: usize = content.iter().filter_map(|(r1, r2)| {
         if r1.0 <= r2.0 && r1.1 >= r2.1 {
             Some(1)
@@ -40,5 +38,16 @@ pub fn solve_first(content: &Vec<InputItem>) {
 }
 
 pub fn solve_second(content: &Vec<InputItem>) {
-    todo!("Implement Second Part")
+    let res: usize = content.iter().filter_map(|(r1, r2)| {
+        if r1.0 <= r2.0 && r1.1 >= r2.0 {
+            Some(1)
+        } else if r2.0 <= r1.0 && r2.1 >= r1.0 {
+            Some(1)
+        } else {
+            None
+        }
+    })
+    .sum();
+
+    println!("Second Part: {}", res);
 }
