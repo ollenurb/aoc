@@ -1,5 +1,5 @@
-mod day1;
-mod day2;
+// mod day1;
+// mod day2;
 mod day3;
 
 use std::io::{BufRead, BufReader};
@@ -20,8 +20,5 @@ fn load_input(day: usize) -> impl Iterator<Item = String> {
 
 fn main() {
     let in3 = load_input(3);
-
-
-
     day3::solve(in3);
 }

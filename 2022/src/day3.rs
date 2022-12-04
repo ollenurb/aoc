@@ -19,27 +19,35 @@ pub fn score(c: char) -> u32 {
 }
 
 pub fn solve_first(content: &Vec<InputItem>) {
-
     let res: u32 = content.iter()
-        .flat_map(|l| {
+        .map(|l| {
             let mid = l.len() / 2;
             let (fh, sh) = l.split_at(mid);
 
-            let mut sh: HashSet<char> = HashSet::from_iter(sh.chars());
+            // Create 2 sets from the splitted string
+            let sh: HashSet<char> = HashSet::from_iter(sh.chars());
+            let fh: HashSet<char> = HashSet::from_iter(fh.chars());
 
-            fh.chars().filter_map(move |c| {
-                if sh.remove(&c) {
-                    Some(score(c))
-                } else {
-                    None
-                }
-            })
-
+            // Intersect then sum
+            sh.intersection(&fh)
+              .map(|f| score(*f))
+              .sum::<u32>()
         }).sum();
 
-    println!("{}", res);
+    println!("First Part: {}", res);
 }
 
 pub fn solve_second(content: &Vec<InputItem>) {
-    todo!("Implement Second Part")
+    let res: u32 = content.chunks(3)
+        .map(|c| {
+            c.iter()
+             .map(|r| HashSet::from_iter(r.chars()))
+             .reduce(|int: HashSet<char>, set| int.intersection(&set).map(|i| *i).collect())
+             .unwrap()
+             .iter()
+             .map(|c| score(*c))
+             .sum::<u32>()
+        }).sum();
+
+    println!("Second Part {}", res);
 }
