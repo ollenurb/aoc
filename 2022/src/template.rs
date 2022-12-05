@@ -6,7 +6,7 @@ fn parse_line(str: String) -> InputItem {
 }
 
 // Solve both problems of this day
-pub fn solve(content: impl Iterator<Item = String>) -> (usize, usize) {
+pub fn solve(content: impl Iterator<Item = String>) -> (String, String) {
     let content: Vec<InputItem> = content.map(|s| parse_line(s)).collect();
     (solve_first(&content), solve_second(&content))
 }
