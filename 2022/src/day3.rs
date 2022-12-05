@@ -3,9 +3,12 @@ use std::collections::HashSet;
 type InputItem = String;
 
 // Solve both problems of this day
-pub fn solve(content: impl Iterator<Item = String>) -> (usize, usize) {
+pub fn solve(content: impl Iterator<Item = String>) -> (String, String) {
     let content: Vec<InputItem> = content.collect();
-    (solve_first(&content), solve_second(&content))
+    (
+        solve_first(&content).to_string(),
+        solve_second(&content).to_string()
+    )
 }
 
 // Returns the score of a given character

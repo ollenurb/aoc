@@ -1,9 +1,12 @@
 type ItemType = Option<usize>;
 
-pub fn solve(content: impl Iterator<Item = String>) -> (usize, usize) {
+pub fn solve(content: impl Iterator<Item = String>) -> (String, String) {
     // Parse the content
     let content: Vec<ItemType> = content.map(|s| s.parse().ok()).collect();
-    (solve_first(&content), solve_second(&content))
+    (
+        solve_first(&content).to_string(),
+        solve_second(&content).to_string()
+    )
 }
 
 fn solve_first(content: &Vec<ItemType>) -> usize {
