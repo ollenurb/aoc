@@ -7,28 +7,28 @@ pub fn solve(mut content: impl Iterator<Item = String>) -> (String, String) {
 }
 
 fn solve_first(content: &String) -> String {
-    content
-        .chars()
-        .scan(HashSet::new(), |state: &mut HashSet<char>, c| {
-            // Manage the state
-            if !state.contains(&c) {
-                state.insert(c);
-            } else {
-                state.clear();
-                state.insert(c);
-            }
+    let size = 4;
 
-            // We reached the end of the header, stop here
-            if state.len() == 4 {
-                None
-            } else {
-                Some(c)
-            }
-        })
-        .count()
-        .to_string()
+    let index = content
+        .as_bytes()
+        .windows(size)
+        .map(|w| w.iter().collect::<HashSet<&u8>>().len() == size)
+        .take_while(|v| !*v)
+        .count();
+
+    (index + size).to_string()
 }
 
 fn solve_second(content: &String) -> String {
-    "Not yet implemented".to_string()
+    let size = 14;
+
+    let index = content
+        .as_bytes()
+        .windows(size)
+        .map(|w| w.iter().collect::<HashSet<&u8>>().len() == size)
+        .take_while(|v| !*v)
+        .count();
+
+    (index + size).to_string()
 }
+
