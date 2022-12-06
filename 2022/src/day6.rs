@@ -12,8 +12,7 @@ fn solve_first(content: &String) -> String {
     let index = content
         .as_bytes()
         .windows(size)
-        .map(|w| w.iter().collect::<HashSet<&u8>>().len() == size)
-        .take_while(|v| !*v)
+        .take_while(|w| w.iter().collect::<HashSet<&u8>>().len() != size)
         .count();
 
     (index + size).to_string()
@@ -25,8 +24,7 @@ fn solve_second(content: &String) -> String {
     let index = content
         .as_bytes()
         .windows(size)
-        .map(|w| w.iter().collect::<HashSet<&u8>>().len() == size)
-        .take_while(|v| !*v)
+        .take_while(|w| w.iter().collect::<HashSet<&u8>>().len() != size)
         .count();
 
     (index + size).to_string()
