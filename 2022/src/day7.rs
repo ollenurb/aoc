@@ -76,5 +76,12 @@ fn solve_first(content: &Vec<InputItem>) -> String {
 }
 
 fn solve_second(content: &Vec<InputItem>) -> String {
-    "Not yet implemented".to_string()
+    let sizes = compute_dir_sizes(&content);
+    let root_sz = sizes.iter().max().unwrap();
+    let unused = 70000000 - root_sz;
+    sizes
+        .iter()
+        .filter(|s| (*s + unused) > 30000000)
+        .min().unwrap()
+        .to_string()
 }
