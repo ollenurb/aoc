@@ -87,5 +87,4 @@ int main(int argc, char** argv) {
     std::cout << "Day 4" << std::endl;
     std::cout << "Solution a: " << solution_a << std::endl;
     std::cout << "Solution b: " << solution_b << std::endl;
-    
 }
