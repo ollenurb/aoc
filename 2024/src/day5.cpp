@@ -53,9 +53,6 @@ int main(int argc, char** argv) {
             for (auto &rule : rules[cur_val]) {
                 for (int j = i; j >= 0; j--) {
                     if (update[j] == rule) {
-                        // std::cout
-                        //     << "Found " << rule << " at position " << j
-                        //     << " that breaks rule " << cur_val << "|" << rule << std::endl; 
                         return false;
                     }
                 }
