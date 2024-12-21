@@ -17,11 +17,11 @@ auto evaluate = [](Sequence &seq, std::vector<int> &ops) -> u_int64_t {
     for (int i = 0; i < ops.size(); i++) {
         switch (ops[i]) {
             case STAR: {
-                result *= seq[i + 1]; 
+                result *= seq[i + 1];
                 break;
             }
             case PLUS: {
-                result += seq[i + 1]; 
+                result += seq[i + 1];
                 break;
             }
             case PIPE: {
@@ -52,11 +52,11 @@ auto parse_string = [](std::string& line) -> std::pair<u_int64_t, Sequence> {
     while (ssline >> val) {
         sequence.push_back(val);
     }
-    
+
     return {result, sequence};
 };
 
-// Check validity of the sequence 
+// Check validity of the sequence
 auto check_validity = [](
     std::pair<u_int64_t,
     std::vector<u_int32_t>>& sequence,
@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
             solution_b += parsed.first;
         }
     }
-    
+
     std::cout << "Day 7" << std::endl;
     std::cout << "Solution a: " << solution_a << std::endl;
     std::cout << "Solution b: " << solution_b << std::endl;
