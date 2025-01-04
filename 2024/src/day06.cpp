@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -24,7 +23,7 @@ int main(int argc, char** argv) {
     auto bounds_check = [&](int i, int j) {
         return i < grid.size() && i >= 0 && j < grid[i].size() && j >= 0;
     };
-    
+
     // Declare all possible directions
     std::map<char, Dir> directions = {
         { '>', {0, +1} },
@@ -32,7 +31,7 @@ int main(int argc, char** argv) {
         { '<', {0, -1} },
         { '^', {-1, 0} }
     };
-    
+
     // Change direction
     auto change_dir = [](char dir) -> char {
         switch (dir) {
@@ -61,7 +60,7 @@ int main(int argc, char** argv) {
         }
         return {};
     };
-    
+
     auto simulate_guard = [&](Grid &grid) -> bool {
         auto [gx, gy] = find_guard(grid);
         // Set used to loop check
@@ -79,7 +78,7 @@ int main(int argc, char** argv) {
                 return true;
             }
             // Handle obstacle
-            if (grid[new_x][new_y] == '#') {                                        
+            if (grid[new_x][new_y] == '#') {
                 grid[gx][gy] = change_dir(guard);
                 // Check Loop only here
                 if (hit.count({ gx, gy, guard }) == 1) {
@@ -103,7 +102,7 @@ int main(int argc, char** argv) {
     int solution_a = 0;
     int solution_b = 0;
     // Copy grid so that we can reuse the original later
-    auto counted_grid = grid; 
+    auto counted_grid = grid;
     simulate_guard(counted_grid);
 
     // For each visited position check with simulate_guard on a grid with an
@@ -111,13 +110,13 @@ int main(int argc, char** argv) {
     for (int i = 0; i < counted_grid.size(); i++) {
         for (int j = 0; j < counted_grid[i].size(); j++) {
             bool is_counted = counted_grid[i][j] == 'X';
-            solution_a += is_counted; 
+            solution_a += is_counted;
             if (is_counted && !is_guard(grid[i][j]) && grid[i][j] != '#') {
                 // Copy grid
                 auto new_grid = grid;
                 // Place obstacle
                 new_grid[i][j] = '#';
-                auto res = !simulate_guard(new_grid); 
+                auto res = !simulate_guard(new_grid);
                 solution_b += res;
             }
         }

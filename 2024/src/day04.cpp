@@ -1,10 +1,7 @@
-#include <cstdlib>
-#include <cstdio>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <tuple>
 
 int main(int argc, char** argv) {
     std::ifstream file(argv[1]);
@@ -15,18 +12,18 @@ int main(int argc, char** argv) {
     while(std::getline(file, line)) {
         fcontent.push_back(std::vector<char>(line.begin(), line.end()));
     }
-    
+
     // Get size
     int ROW_SIZE = fcontent.size();
     int COL_SIZE = fcontent.front().size();
 
     // Solve part a
     int solution_a = 0;
-    
+
     auto bounds_check = [&](int i, int j, int di, int dj) {
         return (i + di * 3 >= 0 && i + di * 3 < ROW_SIZE) && (j + dj * 3 >= 0 && j + dj * 3 < COL_SIZE);
     };
-    
+
     auto check_xmas_a = [&](int i, int j, int di, int dj) {
         return (
             fcontent[i + di][j + dj] == 'M' &&
@@ -34,7 +31,7 @@ int main(int argc, char** argv) {
             fcontent[i + di * 3][j + dj * 3] == 'S'
         );
     };
-    
+
     for (int i = 0; i < ROW_SIZE; i++) {
         for (int j = 0; j < COL_SIZE; j++) {
             for (int di = -1; di <= 1; di++) {
@@ -43,27 +40,27 @@ int main(int argc, char** argv) {
                     if (dj == 0 && di == 0) continue;
                     if (!bounds_check(i, j, di, dj)) continue;
                     if (check_xmas_a(i, j, di, dj)) {
-                        solution_a += 1;                        
+                        solution_a += 1;
                     }
                 }
             }
         }
     }
-    
+
     // Solve part b
     std::vector<std::vector<int>> vertices = {
         {-1, -1, +1, -1, +1, +1, -1, +1},
         {+1, -1, +1, +1, -1, +1, -1, -1},
         {+1, +1, -1, +1, -1, -1, +1, -1},
         {-1, +1, -1, -1, +1, -1, +1, +1},
-    }; 
+    };
 
     // Check all rotations of vertices
     auto check_xmas_b = [&](int i, int j) {
         for (auto &v : vertices) {
-            auto m_1 = fcontent[i + v[0]][j + v[1]]; 
+            auto m_1 = fcontent[i + v[0]][j + v[1]];
             auto m_2 = fcontent[i + v[2]][j + v[3]];
-            auto s_1 = fcontent[i + v[4]][j + v[5]]; 
+            auto s_1 = fcontent[i + v[4]][j + v[5]];
             auto s_2 = fcontent[i + v[6]][j + v[7]];
             if (m_1 == 'M' && m_2 == 'M' && s_1 == 'S' && s_2 == 'S') {
                 return true;

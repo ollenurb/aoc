@@ -4,9 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <tuple>
 #include <map>
-
 
 std::vector<int> parse_ints(std::string& input) {
     std::vector<int> result;
@@ -18,7 +16,7 @@ std::vector<int> parse_ints(std::string& input) {
         } else {
             num += c;
         }
-    } 
+    }
     // last number is not separated by anything
     if (!num.empty()) {
         result.push_back(stoi(num));
@@ -31,7 +29,7 @@ int main(int argc, char** argv) {
     std::map<int, std::vector<int>> rules;
     std::vector<std::vector<int>> updates;
 
-    // Parse rules 
+    // Parse rules
     std::string line;
     while(std::getline(file, line) && !line.empty()) {
         size_t pos = line.find('|');
@@ -87,7 +85,7 @@ int main(int argc, char** argv) {
         }
     };
 
-    // Solve a 
+    // Solve a
     int solution_a = 0;
     int solution_b = 0;
     for (auto &update : updates) {
