@@ -1,8 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <tuple>
-#include <string>
 #include <algorithm>
 #include <cmath>
 
@@ -23,16 +21,16 @@ int main(int argc, char** argv) {
             is_first = !is_first;
         }
     }
-    
+
     // Solve "a"
     std::sort(first_list.begin(), first_list.end());
     std::sort(second_list.begin(), second_list.end());
-    
+
     unsigned long solution_a = 0;
     for (int i = 0; i < first_list.size(); i++) {
         solution_a += std::abs(first_list[i] - second_list[i]);
     }
-    
+
     // Solve "b"
     unsigned long solution_b = 0;
     for (int i = 0; i < first_list.size(); i++) {
